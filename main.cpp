@@ -17,5 +17,8 @@ int main(int argc, const char *argv[])
     //tree_dump(&initial_expression);
     //tree_dump(&derivative);
 
+    tree_dtor(&initial_expression);
+    tree_dtor(&derivative);
+
     return 0;
 }

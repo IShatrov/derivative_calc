@@ -12,17 +12,26 @@
 
 #define COPY(src) subtree_cpy(tree, NEW_NODE, src)
 
-#define PRINT(arg) tex_print_math(tex, arg)
+#define PRINT(arg)                              \
+    if(arg->priority < node->priority)          \
+    {                                           \
+        TEX_PRINT("(");                         \
+        tex_print_math(tex, arg);               \
+        TEX_PRINT(")");                         \
+    }                                           \
+    else tex_print_math(tex, arg);
 
 #define FIND(node, var) tree_find(node, var)
 
-#define NEW_OP_NODE(oper)              \
+#define NEW_OP_NODE(name)              \
     NEW_NODE;                          \
     new_node->type = NODE_OP;          \
-    new_node->op = oper;               \
+    new_node->op = OP_##name;          \
+    new_node->priority = PRIO_##name;  \
 
 #define NEW_NUM_NODE(arg)              \
     NEW_NODE;                          \
     new_node->type = NODE_NUM;         \
-    new_node->val = arg                \
+    new_node->val = arg;               \
+    new_node->priority = PRIO_NUM;     \
 

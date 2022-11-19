@@ -56,6 +56,20 @@ enum operators
 #undef DEF_BIN_OP
 #undef DEF_UN_OP
 
+#define DEF_BIN_OP(name, symbol, derivative, put, prio, ...) PRIO_##name = prio,
+#define DEF_UN_OP(name, symbol, derivative, put, prio, ...) PRIO_##name = prio,
+enum priorities
+{
+    PRIO_VAR = 100,
+    PRIO_NUM = 100,
+
+    #include "binary_operators.h"
+    #include "unary_operators.h"
+};
+
+#undef DEF_BIN_OP
+#undef DEF_UN_OP
+
 typedef double tree_elmt;
 
 typedef struct tree_node tree_node;
@@ -63,6 +77,8 @@ typedef struct tree_node tree_node;
 struct tree_node
 {
     char type;
+
+    char priority;
 
     tree_node *l_child;
     tree_node *r_child;

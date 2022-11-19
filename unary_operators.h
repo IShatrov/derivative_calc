@@ -4,14 +4,14 @@ DEF_UN_OP(SIN, sin,
 
     RIGHT(node) = DIFF(RIGHT(target));
 
-    LEFT(node) = NEW_OP_NODE(OP_COS);
+    LEFT(node) = NEW_OP_NODE(COS);
     RIGHT(LEFT(node)) = COPY(RIGHT(target));
 },
 {
     TEX_PRINT("\\sin(");
     PRINT(RIGHT(node));
     TEX_PRINT(")");
-})
+}, 10)
 
 DEF_UN_OP(COS, cos,
 {
@@ -19,9 +19,9 @@ DEF_UN_OP(COS, cos,
 
     RIGHT(node) = DIFF(RIGHT(target));
 
-    LEFT(node) = NEW_OP_NODE(OP_MULT);
+    LEFT(node) = NEW_OP_NODE(MULT);
     LEFT(LEFT(node)) = NEW_NUM_NODE(-1);       //(cos(t))' = -sin(t)t'
-    RIGHT(LEFT(node)) = NEW_OP_NODE(OP_SIN);
+    RIGHT(LEFT(node)) = NEW_OP_NODE(SIN);
 
     RIGHT(RIGHT(LEFT(node))) = COPY(RIGHT(target));
 },
@@ -29,7 +29,7 @@ DEF_UN_OP(COS, cos,
     TEX_PRINT("\\cos(");
     PRINT(RIGHT(node));
     TEX_PRINT(")");
-})
+}, 10)
 
 DEF_UN_OP(LN, ln,
 {
@@ -37,7 +37,7 @@ DEF_UN_OP(LN, ln,
 
     RIGHT(node) = DIFF(RIGHT(target));
 
-    LEFT(node) = NEW_OP_NODE(OP_DIV);
+    LEFT(node) = NEW_OP_NODE(DIV);
     RIGHT(LEFT(node)) = COPY(RIGHT(target));
     LEFT(LEFT(node)) = NEW_NUM_NODE(1);
 },
@@ -45,4 +45,4 @@ DEF_UN_OP(LN, ln,
     TEX_PRINT("\\ln(");
     PRINT(RIGHT(node));
     TEX_PRINT(")");
-})
+}, 10)

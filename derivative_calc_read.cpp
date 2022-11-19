@@ -65,6 +65,7 @@ my_tree parse_expression(const char *src_filename)
 else if(!(strncmp(#symbol, *text, strlen(#symbol)))) \
 {                                                    \
     node->op = OP_##name;                            \
+    node->priority = PRIO_##name;                    \
                                                      \
     *text += strlen(#symbol);                        \
                                                      \
@@ -76,6 +77,7 @@ else if(!(strncmp(#symbol, *text, strlen(#symbol))))    \
 {                                                       \
     node->type = NODE_OP;                               \
     node->op = OP_##name;                               \
+    node->priority = PRIO_##name;                       \
                                                         \
     *text += strlen(#symbol);                           \
                                                         \
@@ -134,6 +136,7 @@ void parse_node(char **text, my_tree *tree, tree_node *node)
             if(sscanf(*text, "%lf", &num))
             {
                 node->type = NODE_NUM;
+                node->priority = PRIO_NUM;
 
                 node->val = num;
 
@@ -143,6 +146,7 @@ void parse_node(char **text, my_tree *tree, tree_node *node)
             else if(sscanf(*text, "%c", &var))
             {
                 node->type = NODE_VAR;
+                node->priority = PRIO_VAR;
 
                 node->var = var;
 

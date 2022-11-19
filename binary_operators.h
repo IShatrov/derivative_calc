@@ -10,7 +10,7 @@ DEF_BIN_OP(ADD, +,
     PRINT(LEFT(node));
     TEX_PRINT(" + ");
     PRINT(RIGHT(node));
-})
+}, 0)
 
 DEF_BIN_OP(SUB, -,
 {
@@ -24,17 +24,17 @@ DEF_BIN_OP(SUB, -,
     PRINT(LEFT(node));
     TEX_PRINT(" - ");
     PRINT(RIGHT(node));
-})
+}, 0)
 
 DEF_BIN_OP(MULT, *,
 {
     node->op = OP_ADD;
 
-    LEFT(node) = NEW_OP_NODE(OP_MULT);
+    LEFT(node) = NEW_OP_NODE(MULT);
     LEFT(LEFT(node)) = DIFF(LEFT(target));
     RIGHT(LEFT(node)) = COPY(RIGHT(target));
 
-    RIGHT(node) = NEW_OP_NODE(OP_MULT);
+    RIGHT(node) = NEW_OP_NODE(MULT);
     LEFT(RIGHT(node)) = DIFF(RIGHT(target));
     RIGHT(RIGHT(node)) = COPY(LEFT(target));
 },
@@ -42,23 +42,23 @@ DEF_BIN_OP(MULT, *,
     PRINT(LEFT(node));
     TEX_PRINT(" \\cdot ");
     PRINT(RIGHT(node));
-})
+}, 10)
 
 DEF_BIN_OP(DIV, /,
 {
     node->op = OP_DIV;
 
-    RIGHT(node) = NEW_OP_NODE(OP_POW);
+    RIGHT(node) = NEW_OP_NODE(POW);
     LEFT(RIGHT(node)) = COPY(RIGHT(target));
     RIGHT(RIGHT(node)) = NEW_NUM_NODE(2); //denominator is squared, see derivative formulas
 
-    LEFT(node) = NEW_OP_NODE(OP_SUB);
+    LEFT(node) = NEW_OP_NODE(SUB);
 
-    LEFT(LEFT(node)) = NEW_OP_NODE(OP_MULT);
+    LEFT(LEFT(node)) = NEW_OP_NODE(MULT);
     LEFT(LEFT(LEFT(node))) = DIFF(LEFT(target));
     RIGHT(LEFT(LEFT(node))) = COPY(RIGHT(target));
 
-    RIGHT(LEFT(node)) = NEW_OP_NODE(OP_MULT);
+    RIGHT(LEFT(node)) = NEW_OP_NODE(MULT);
     LEFT(RIGHT(LEFT(node))) = DIFF(RIGHT(target));
     RIGHT(RIGHT(LEFT(node))) = COPY(LEFT(target));
 },
@@ -68,7 +68,7 @@ DEF_BIN_OP(DIV, /,
     TEX_PRINT("}{");
     PRINT(RIGHT(node));
     TEX_PRINT("}");
-})
+}, 10)
 
 DEF_BIN_OP(POW, ^,
 {
@@ -84,11 +84,11 @@ DEF_BIN_OP(POW, ^,
 
             RIGHT(node) = DIFF(LEFT(target));
 
-            LEFT(node) = NEW_OP_NODE(OP_MULT);
+            LEFT(node) = NEW_OP_NODE(MULT);
 
             LEFT(LEFT(node)) = NEW_NUM_NODE(RIGHT(target)->val);
 
-            RIGHT(LEFT(node)) = NEW_OP_NODE(OP_POW);
+            RIGHT(LEFT(node)) = NEW_OP_NODE(POW);
             LEFT(RIGHT(LEFT(node))) = COPY(LEFT(target));
             RIGHT(RIGHT(LEFT(node))) = NEW_NUM_NODE(RIGHT(target)->val - 1);
         }
@@ -101,9 +101,9 @@ DEF_BIN_OP(POW, ^,
 
             LEFT(node) = COPY(target);
 
-            RIGHT(node) = NEW_OP_NODE(OP_MULT);
+            RIGHT(node) = NEW_OP_NODE(MULT);
 
-            LEFT(RIGHT(node)) = NEW_OP_NODE(OP_LN);
+            LEFT(RIGHT(node)) = NEW_OP_NODE(LN);
             RIGHT(LEFT(RIGHT(node))) = NEW_NUM_NODE(LEFT(target)->val);
 
             RIGHT(RIGHT(node)) = DIFF(RIGHT(target));
@@ -120,4 +120,4 @@ DEF_BIN_OP(POW, ^,
     TEX_PRINT("^{");
     PRINT(RIGHT(node));
     TEX_PRINT("}");
-})
+}, 20)

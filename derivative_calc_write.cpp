@@ -49,8 +49,6 @@ void tex_print_math(FILE *tex, const tree_node *node)
             TEX_PRINT("%c", node->var);
             break;
         case NODE_OP:
-            TEX_PRINT("(");
-
             switch(node->op)
             {
                 #include "binary_operators.h"
@@ -58,8 +56,6 @@ void tex_print_math(FILE *tex, const tree_node *node)
                 default:
                     printf("ERROR: unknown operator\n");
             }
-
-            TEX_PRINT(")");
             break;
         default:
             printf("ERROR: invalid node content\n");

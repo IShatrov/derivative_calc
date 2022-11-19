@@ -42,11 +42,13 @@ tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target)
             {
                 node->type = NODE_NUM;
                 node->val = 1;
+                node->priority = PRIO_NUM;
             }
             else
             {
                 node->type = NODE_VAR;
                 node->var = target->var;
+                node->priority = PRIO_VAR;
             }
             break;
         case NODE_OP:
@@ -77,6 +79,7 @@ tree_node* subtree_cpy(my_tree *tree, tree_node *dest, const tree_node *src)
     dest->type = src->type;
 
     memcpy(&(dest->val), &(src->val), sizeof(double));
+    dest->priority = src->priority;
 
     tree_node *new_node;
 
