@@ -3,8 +3,11 @@
 
 #include "tree.h"
 #include "dsl.h"
+#include "err_msgs.h"
 
 #define NUM_TO_STR(num) #num
+
+const double EPSILON = 1e-6;
 
 //derivative_calc_read.cpp
 
@@ -31,6 +34,14 @@ tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target);
 tree_node* subtree_cpy(my_tree *tree, tree_node *dest, const tree_node *src);
 
 char tree_find(tree_node *node, const char target);
+
+int are_doubles_equal(double n1, double n2);
+
+char simplify(my_tree *tree, tree_node *node);
+
+char fold_consts(tree_node *node);
+
+char fold_neutral(my_tree *tree, tree_node *node);
 
 //derivative_calc_write.cpp
 

@@ -8,9 +8,25 @@
 
 #define RIGHT(node) ((node)->r_child)
 
+#define TYPE(node) ((node)->type)
+
+#define VAL(node) ((node)->val)
+
 #define DIFF(target) diff(tree, NEW_NODE, target)
 
 #define COPY(src) subtree_cpy(tree, NEW_NODE, src)
+
+#define NODE_COPY(src) subtree_cpy(tree, node, src)
+
+#define EQUALS(n1, n2) (are_doubles_equal((n1), (n2)))
+
+#define OP(node) ((node)->op)
+
+#define IS_NUM(node) ((TYPE(node) == NODE_NUM)?(1):(0))
+
+#define CUT(node)        \
+    LEFT(node) = NULL;   \
+    RIGHT(node) = NULL;  \
 
 #define PRINT(arg)                              \
     if(arg->priority < node->priority)          \
@@ -35,3 +51,8 @@
     new_node->val = arg;               \
     new_node->priority = PRIO_NUM;     \
 
+#define FILL_NODE(num)           \
+    TYPE(node) = NODE_NUM;       \
+    VAL(node) = (num);           \
+    node->priority = PRIO_NUM;   \
+    CUT(node);

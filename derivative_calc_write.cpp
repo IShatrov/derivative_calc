@@ -54,11 +54,11 @@ void tex_print_math(FILE *tex, const tree_node *node)
                 #include "binary_operators.h"
                 #include "unary_operators.h"
                 default:
-                    printf("ERROR: unknown operator\n");
+                    ERR_N_OP(node->op);
             }
             break;
         default:
-            printf("ERROR: invalid node content\n");
+            ERR_UNDEFINED;
     }
 
     return;

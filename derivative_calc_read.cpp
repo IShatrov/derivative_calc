@@ -51,9 +51,6 @@ my_tree parse_expression(const char *src_filename)
 
     parse_node(&ptr, &tree, tree.root);
 
-    //tree_dump(&tree);
-    //printf("final text: %s\n", ptr);
-
     fclose(src);
     free(text);
 
@@ -94,10 +91,6 @@ void parse_node(char **text, my_tree *tree, tree_node *node)
     assert(tree);
     assert(node);
 
-    //printf("%s\n", *text);
-    //tree_dump(tree);
-    //getchar();
-
     if(**text == '(')
     {
         (*text)++;
@@ -115,7 +108,7 @@ void parse_node(char **text, my_tree *tree, tree_node *node)
 
             if(0); //this is required for else if in macro definition
             #include "binary_operators.h"
-            else printf("ERROR: operator not found\n");
+            else ERR_OP_TEXT;
 
             NEW_NODE;
             ADD_R(new_node);
@@ -126,7 +119,7 @@ void parse_node(char **text, my_tree *tree, tree_node *node)
                 (*text)++;
                 SKIP_SPACES((*text));
             }
-            else printf("ERROR: missing )\n");
+            else ERR_MISSING_CLOSE_BRACKET;
         }
         else            //unary operators, vars or nums
         {
@@ -152,15 +145,15 @@ void parse_node(char **text, my_tree *tree, tree_node *node)
 
                 (*text)++;
             }
-            else printf("ERROR: undefined thing\n");
+            else ERR_UNDEFINED;
 
             if(**text == ')') (*text)++;
-            else printf("ERROR: missing )\n");
+            else ERR_MISSING_CLOSE_BRACKET;
 
             SKIP_SPACES((*text));
         }
     }
-    else printf("ERROR: missing ( \n");
+    else ERR_MISSING_OPEN_BRACKET;
 
     return;
 }
