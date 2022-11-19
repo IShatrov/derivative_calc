@@ -1,13 +1,13 @@
 #include "derivative_calc.h"
 
-my_tree get_derivative(const my_tree *init_tree)
+my_tree get_derivative(const my_tree *init_tree, FILE *degenerator)
 {
     assert(init_tree);
 
     my_tree tree;
     tree_ctor(&tree, DEFAULT_TREE_CAP);
 
-    diff(&tree, tree.root, init_tree->root);
+    diff(&tree, tree.root, init_tree->root, degenerator);
 
     return tree;
 }
@@ -25,11 +25,13 @@ my_tree get_derivative(const my_tree *init_tree)
         derivative;                                 \
         break;                                      \
 }
-tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target)
+tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target, FILE *degenerator)
 {
     assert(tree);
     assert(node);
     assert(target);
+
+    if(degenerator) degenerator_print(degenerator, target);
 
     switch(target->type)
     {
@@ -218,7 +220,7 @@ char fold_neutral(my_tree *tree, tree_node *node)
 
     if(TYPE(LEFT(node)) == NODE_OP && TYPE(RIGHT(node)) == NODE_OP) return 0;
 
-    tree_node *new_node;
+   // tree_node *new_node;
 
     switch(node->op)
     {

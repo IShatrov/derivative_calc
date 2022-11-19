@@ -12,7 +12,7 @@
 
 #define VAL(node) ((node)->val)
 
-#define DIFF(target) diff(tree, NEW_NODE, target)
+#define DIFF(target) diff(tree, NEW_NODE, target, degenerator)
 
 #define COPY(src) subtree_cpy(tree, NEW_NODE, src)
 

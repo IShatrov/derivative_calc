@@ -27,9 +27,9 @@ void parse_node(char **text, my_tree *tree, tree_node *node);
 
 //derivative_calc_diff.cpp
 
-my_tree get_derivative(const my_tree *init_tree);
+my_tree get_derivative(const my_tree *init_tree, FILE *degenerator);
 
-tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target);
+tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target, FILE *degenerator);
 
 tree_node* subtree_cpy(my_tree *tree, tree_node *dest, const tree_node *src);
 
@@ -48,5 +48,15 @@ char fold_neutral(my_tree *tree, tree_node *node);
 void out_latex(const my_tree *tree);
 
 void tex_print_math(FILE *tex, const tree_node *node);
+
+void tex_print_math_brackets(FILE *tex, const tree_node *node);
+
+FILE* degenerator_ctor();
+
+void degenerator_dtor(FILE *tex);
+
+void tex_print_derivative(FILE *tex, const tree_node *node);
+
+void degenerator_print(FILE *tex, const tree_node *node);
 
 #endif
