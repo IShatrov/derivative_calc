@@ -14,6 +14,8 @@
 
 #define PRINT(arg) tex_print_math(tex, arg)
 
+#define FIND(node, var) tree_find(node, var)
+
 #define NEW_OP_NODE(oper)              \
     NEW_NODE;                          \
     new_node->type = NODE_OP;          \
@@ -23,3 +25,4 @@
     NEW_NODE;                          \
     new_node->type = NODE_NUM;         \
     new_node->val = arg                \
+

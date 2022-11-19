@@ -30,6 +30,8 @@ tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target);
 
 tree_node* subtree_cpy(my_tree *tree, tree_node *dest, const tree_node *src);
 
+char tree_find(tree_node *node, const char target);
+
 //derivative_calc_write.cpp
 
 void out_latex(const my_tree *tree);

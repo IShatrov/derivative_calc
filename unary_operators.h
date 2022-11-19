@@ -30,3 +30,19 @@ DEF_UN_OP(COS, cos,
     PRINT(RIGHT(node));
     TEX_PRINT(")");
 })
+
+DEF_UN_OP(LN, ln,
+{
+    node->op = OP_MULT;
+
+    RIGHT(node) = DIFF(RIGHT(target));
+
+    LEFT(node) = NEW_OP_NODE(OP_DIV);
+    RIGHT(LEFT(node)) = COPY(RIGHT(target));
+    LEFT(LEFT(node)) = NEW_NUM_NODE(1);
+},
+{
+    TEX_PRINT("\\ln(");
+    PRINT(RIGHT(node));
+    TEX_PRINT(")");
+})

@@ -72,7 +72,48 @@ DEF_BIN_OP(DIV, /,
 
 DEF_BIN_OP(POW, ^,
 {
-    ;
+    char is_l_func = FIND(LEFT(target), 'x');
+    char is_r_func = FIND(RIGHT(target), 'x');
+
+    if(is_l_func)
+    {
+        if(is_r_func) printf("I am not doing this\n");
+        else
+        {
+            node->op = OP_MULT;
+
+            RIGHT(node) = DIFF(LEFT(target));
+
+            LEFT(node) = NEW_OP_NODE(OP_MULT);
+
+            LEFT(LEFT(node)) = NEW_NUM_NODE(RIGHT(target)->val);
+
+            RIGHT(LEFT(node)) = NEW_OP_NODE(OP_POW);
+            LEFT(RIGHT(LEFT(node))) = COPY(LEFT(target));
+            RIGHT(RIGHT(LEFT(node))) = NEW_NUM_NODE(RIGHT(target)->val - 1);
+        }
+    }
+    else
+    {
+        if(is_r_func)
+        {
+            node->op = OP_MULT;
+
+            LEFT(node) = COPY(target);
+
+            RIGHT(node) = NEW_OP_NODE(OP_MULT);
+
+            LEFT(RIGHT(node)) = NEW_OP_NODE(OP_LN);
+            RIGHT(LEFT(RIGHT(node))) = NEW_NUM_NODE(LEFT(target)->val);
+
+            RIGHT(RIGHT(node)) = DIFF(RIGHT(target));
+        }
+        else
+        {
+            node->type = NODE_NUM;
+            node->val = 0;
+        }
+    }
 },
 {
     PRINT(LEFT(node));

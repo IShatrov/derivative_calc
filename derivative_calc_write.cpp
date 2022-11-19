@@ -55,10 +55,14 @@ void tex_print_math(FILE *tex, const tree_node *node)
             {
                 #include "binary_operators.h"
                 #include "unary_operators.h"
+                default:
+                    printf("ERROR: unknown operator\n");
             }
 
             TEX_PRINT(")");
             break;
+        default:
+            printf("ERROR: invalid node content\n");
     }
 
     return;

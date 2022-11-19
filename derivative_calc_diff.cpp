@@ -56,6 +56,8 @@ tree_node* diff(my_tree *tree, tree_node *node, const tree_node *target)
             {
                 #include "binary_operators.h"
                 #include "unary_operators.h"
+                default:
+                printf("ERROR: unknown operator\n");
             }
             break;
         default:
@@ -97,4 +99,17 @@ tree_node* subtree_cpy(my_tree *tree, tree_node *dest, const tree_node *src)
     }
 
     return dest;
+}
+
+char tree_find(tree_node *node, const char target)
+{
+    assert(node);
+
+    if(node->type == NODE_VAR && node->var == target) return 1;
+
+    if(node->l_child && tree_find(node->l_child, target)) return 1;
+
+    if(node->r_child && tree_find(node->r_child, target)) return 1;
+
+    return 0;
 }
