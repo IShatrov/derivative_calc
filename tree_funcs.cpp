@@ -133,8 +133,8 @@ void node_free(tree_node *node)
     assert(node);
 
     node->type = TYPE_POISON;
-    node->l_child = NULL;
-    node->r_child = NULL;
+    if(node->l_child) node->l_child = NULL;
+    if(node->r_child) node->r_child = NULL;
 
     return;
 }

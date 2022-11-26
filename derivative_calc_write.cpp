@@ -1,4 +1,5 @@
 #include "derivative_calc.h"
+#include "texts.h"
 
 #define TEX_PRINT(...) fprintf(tex, __VA_ARGS__)
 
@@ -83,26 +84,7 @@ void tex_print_math_brackets(FILE *tex, const tree_node *node)
 
     TEX_PRINT("(");
 
-    switch(node->type)
-    {
-        case NODE_NUM:
-            TEX_PRINT("%.3lf", node->val);
-            break;
-        case NODE_VAR:
-            TEX_PRINT("%c", node->var);
-            break;
-        case NODE_OP:
-            switch(node->op)
-            {
-                #include "binary_operators.h"
-                #include "unary_operators.h"
-                default:
-                    ERR_N_OP(node->op);
-            }
-            break;
-        default:
-            ERR_UNDEFINED;
-    }
+    tex_print_math(tex, node);
 
     TEX_PRINT(")");
 
@@ -111,23 +93,49 @@ void tex_print_math_brackets(FILE *tex, const tree_node *node)
 #undef DEF_BIN_OP
 #undef DEF_UN_OP
 
-FILE* degenerator_ctor()
+FILE* degenerator_ctor(my_tree *init_expr)
 {
+    assert(init_expr);
+
     FILE *tex = fopen("degenerator_out.tex", "w");
     assert(tex);
 
-    TEX_PRINT("\\documentclass[a4paper, 12pt]{article}\n\n"
-              "\\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools, breqn}\n\n"
-              "\\begin{document}\n\n");
+    FILE *d_head = fopen("deg_doc_head.txt", "r");
+    assert(d_head);
+
+    char *deg_doc_head = read_text(d_head);
+    TEX_PRINT("%s", deg_doc_head);
+    free(deg_doc_head);
+
+    TEX_PRINT("\\[f(x)=");
+    tex_print_math(tex, init_expr->root);
+    TEX_PRINT("\\]\n");
+
+    fclose(d_head);
 
     return tex;
 }
 
-void degenerator_dtor(FILE *tex)
+void degenerator_dtor(FILE *tex, my_tree *derivative)
 {
     assert(tex);
+    assert(derivative);
 
-    TEX_PRINT("\\end{document}");
+    simplify(derivative, derivative->root);
+
+    TEX_PRINT("В итоге\n\\[f'(x)=");
+    tex_print_math(tex, derivative->root);
+    TEX_PRINT("\\]\n");
+
+    FILE *d_tail = fopen("deg_doc_tail.txt", "r");
+    assert(d_tail);
+
+    char *deg_doc_tail = read_text(d_tail);
+
+    fclose(d_tail);
+
+    TEX_PRINT("%s", deg_doc_tail);
+    free(deg_doc_tail);
 
     fclose(tex);
 
@@ -182,6 +190,10 @@ void degenerator_print(FILE *tex, const tree_node *node)
 {
     assert(tex);
     assert(node);
+
+    const char *ptr = rand_text(deg_transitions, n_transit);
+
+    TEX_PRINT("%s\n", ptr);
 
     TEX_PRINT("\\begin{dmath}\n");
 
@@ -319,4 +331,28 @@ void degenerator_print(FILE *tex, const tree_node *node)
     TEX_PRINT("\\end{dmath}\n\n");
 
     return;
+}
+
+const char* rand_text(const char **array, int size)
+{
+    assert(array);
+    assert(size);
+
+    int n_tries = 0;
+
+    while(n_tries++ < MAX_RND_TRIES)
+    {
+        int rand_int = (rand() % (size + 1));
+
+        //printf("generated %d\n", rand_int);
+
+        if(array[rand_int])
+        {
+            const char *ptr = array[rand_int];
+            array[rand_int] = NULL;
+            return ptr;
+        }
+    }
+
+    return text_obvious;
 }

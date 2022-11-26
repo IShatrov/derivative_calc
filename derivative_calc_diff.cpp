@@ -244,7 +244,7 @@ char fold_neutral(my_tree *tree, tree_node *node)
             }
             break;
         case OP_MULT:
-            if(IS_NUM(LEFT(node)) && EQUALS(0, VAL(LEFT(node))))
+            if(IS_NUM(LEFT(node)) && EQUALS(0, VAL(LEFT(node))))  //macro
             {
                 FILL_NODE(0);
                 return 1;
